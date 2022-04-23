@@ -23,8 +23,8 @@ def encrypt(text: str, key: str) -> str:
     output = output[:-1]
     return output
 
-def translate_ascii(encoded: list, sep: str=" ") -> str:
-    """translates passed in ascii (encoded) and a separator between each char (sep, default is a space) into text."""
+def translate_ascii(encoded: list) -> str:
+    """translates passed in ascii (encoded)"""
     text = ""
     for char in encoded:
         text = text + chr(char)
