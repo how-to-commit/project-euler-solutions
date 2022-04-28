@@ -1,6 +1,5 @@
-def romanNumeralParser(romanNumerals: str) -> int:
-    """Parses Roman numerals and returns an integer.
-    Returns -1 in error condition, where any char inputted is not a Roman numeral."""
+def romanNumeralParser(inp: str) -> int:
+    """Parses Roman numerals and returns an integer."""
     denominations = {
         'I': 1,
         'V': 5,
@@ -11,28 +10,26 @@ def romanNumeralParser(romanNumerals: str) -> int:
         'M': 1000
     }
     denary = 0
-    try:
-        prev_char_value = 0
-        for char in romanNumerals[:-1].upper():
-            current_char_value = denominations[char] 
-            if current_char_value < prev_char_value:
-                denary -= current_char_value
-            elif current_char_value > prev_char_value:
-                denary += current_char_value
-            else:                                       # this handles the situation where multiple of the same symbol are stacked together
-                denary += current_char_value
-                prev_char_value += current_char_value
+    for i in range(len(inp)):
+        casefold_inp = inp.upper()
+        try:
+            value = denominations[casefold_inp[i]]
+            # if the value of the next char is bigger than this one, then this char has negative value
+            if i+1 < len(inp) and denominations[casefold_inp[i+1]] > value:
+                denary -= value
+            else:
+                denary += value
 
-    except KeyError:
-        return -1 # error condition
+        # KeyError only raised by Python when casefold_inp[i] is not a valid key in denominations
+        except KeyError:
+            return ValueError('Input %s is not a valid Roman numeral.' % inp)
     
     return denary
 
 
-print(
-    romanNumeralParser("XVI"),
-    romanNumeralParser("1"),
-    romanNumeralParser("abc"),
-    romanNumeralParser("xvi")
-)
+if __name__ == "__main__":
+    with open("p089_roman.txt") as ROMAN:
+        for line in ROMAN:
+            line = line[:-1] # remove the newline at the end
+            print(line, romanNumeralParser(line))
     
